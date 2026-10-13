@@ -162,6 +162,59 @@ function Circuit({ className = "" }) {
     </svg>
   );
 }
+// Kit (ConvertKit) form — posts to Kit's public form endpoint, no API key needed.
+const KIT_FORM_ID = "10037259";
+function KitSignup() {
+  const [email, setEmail] = useState("");
+  const [state, setState] = useState("idle"); // idle | loading | success | error
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setState("loading");
+    const body = new FormData();
+    body.append("email_address", email);
+    try {
+      await fetch(`https://app.kit.com/forms/${KIT_FORM_ID}/subscriptions`, {
+        method: "POST",
+        body,
+        mode: "no-cors",
+      });
+      setState("success");
+      setEmail("");
+    } catch {
+      setState("error");
+    }
+  }
+  if (state === "success") {
+    return (
+      <div className="signup-pending" role="status">
+        <span className="plus" aria-hidden="true">✓</span>
+        <span>Almost done — check your inbox to confirm.</span>
+      </div>
+    );
+  }
+  return (
+    <form className="signup-form" onSubmit={handleSubmit}>
+      <label className="sr-only" htmlFor="kit-email">Email address</label>
+      <input
+        id="kit-email"
+        type="email"
+        required
+        placeholder="Email for launch news"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        disabled={state === "loading"}
+      />
+      <button id="kit-submit" type="submit" disabled={state === "loading"}>
+        {state === "loading" ? "Joining…" : "Notify me"} <Arrow />
+      </button>
+      {state === "error" && (
+        <p className="signup-error" role="alert">
+          Something went wrong. Please try again.
+        </p>
+      )}
+    </form>
+  );
+}
 function LaunchSection() {
   return (
     <section
@@ -187,12 +240,7 @@ function LaunchSection() {
             We’re putting the finishing touches on our first two plugins. Take a
             look around, get to know the tools, and check back for launch news.
           </p>
-          <div className="signup-pending">
-            <span className="plus" aria-hidden="true">
-              +
-            </span>
-            <span>Launch notifications opening soon</span>
-          </div>
+          <KitSignup />
           <p className="fineprint">
             Release details and audio demos will be shared here as they’re
             ready.

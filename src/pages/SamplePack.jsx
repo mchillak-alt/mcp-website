@@ -52,7 +52,7 @@ export default function SamplePack() {
               <h1 id="pack-title" style={{ fontSize: '3rem', margin: '1rem 0' }}>
                 {pack.title}
               </h1>
-              <p style={{ fontSize: '1.25rem', marginBottom: '2rem', maxWidth: '100%' }}>
+              <p style={{ fontSize: '1.25rem', marginBottom: '2rem', maxWidth: '100%', whiteSpace: 'pre-line' }}>
                 {pack.description}
               </p>
               

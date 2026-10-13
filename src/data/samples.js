@@ -33,10 +33,10 @@ export const samples = [
   {
     id: "vol-4",
     title: "Mischa Chillak Vol.4",
-    description: "Discover Mischa Chillak's groundbreaking sample libraries. Explore 12-track collections inspired by 1970s Polish and Ukrainian psychedelic rock, featuring analog synthesizers, live instruments, and unique Ableton tools.",
+    description: "Mischa Chillak Vol.4 delivers 11 original compositions engineered with professional-grade production. Each track is available with stems, giving you complete creative control to remix, sample, and build upon the foundation.\n\nBeyond the samples, you’ll gain direct insight into Mischa’s creative process through 3 full-length tutorials. Learn his hybrid workflow combining analog warmth with digital precision, explore advanced mixing techniques, and discover the FX strategies that define his distinctive sound.\n\nWhat’s included:\n• 11 original compositions (WAV format)\n• Full stems for each track\n• 3 in-depth production tutorials\n• Mixing and FX breakdown sessions\n• Analog and digital workflow insights",
     price: 24.99,
     image: vol4,
-    checkoutUrl: "#whop-checkout-url-vol4"
+    checkoutUrl: "https://whop.com/mcpaudio/mischa-chillak-vol-4"
   },
   {
     id: "vol-5",
