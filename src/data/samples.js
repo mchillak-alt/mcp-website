@@ -9,10 +9,10 @@ export const samples = [
   {
     id: "vol-1",
     title: "Mischa Chillak Vol.1",
-    description: "Discover Mischa Chillak's groundbreaking sample libraries. Explore 12-track collections inspired by 1970s Polish and Ukrainian psychedelic rock, featuring analog synthesizers, live instruments, and unique Ableton tools.",
+    description: "“Mischa Chillak Volume 1” is a 12-track musical library that channels the experimental spirit of 1970s Polish and Ukrainian psychedelic rock. Crafted using live instruments, analog synthesizers, and vintage outboard gear, the collection captures a raw, boundary-pushing sound that blends organic instrumentation with otherworldly electronic textures. Each track is ready to be flipped and sampled to help you create something unique and original-sounding in your own music.",
     price: 24.99,
     image: vol1,
-    checkoutUrl: "#whop-checkout-url-vol1"
+    checkoutUrl: "https://whop.com/mcpaudio/mischa-chillak-vol-1"
   },
   {
     id: "vol-2",
