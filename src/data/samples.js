@@ -41,17 +41,17 @@ export const samples = [
   {
     id: "vol-5",
     title: "Mischa Chillak Vol.5",
-    description: "Discover Mischa Chillak's groundbreaking sample libraries. Explore 12-track collections inspired by 1970s Polish and Ukrainian psychedelic rock, featuring analog synthesizers, live instruments, and unique Ableton tools.",
+    description: "Mischa Chillak Vol.5 contains 10 samples inspired by 70s Psych, Soul & Experimental recordings. In addition to the samples, he's included 3 full length tutorials breaking down his thought process on creating samples, mixing & fx tips, plus showing you his unique hybrid approach of using analog and digital tools to craft his sound. This pack is very versatile and contains strong melodic lines that will inspire any producer no matter what genre of beats you're working on.",
     price: 24.99,
     image: vol5,
-    checkoutUrl: "#whop-checkout-url-vol5"
+    checkoutUrl: "https://whop.com/mcpaudio/mischa-chillak-vol-5"
   },
   {
     id: "accents",
     title: "Mischa Chillak Accents Vol.1",
-    description: "Sample pack of one shots for use in productions and musical compostions. These sounds add character and texture to otherwise bland compostions.",
+    description: "This is not a normal one shot pack. These are sounds that give impact and life and depth to an otherwise bland soundscape. Use them to enhance and deepen flat sounding chords, or just add a bit of texture to anything that is lacking character. These sounds will work in both vintage and modern compositions. Try them out yourself.",
     price: 0,
     image: accents,
-    checkoutUrl: "#whop-checkout-url-accents"
+    checkoutUrl: "https://whop.com/mcpaudio/mischa-chillak-accents-vol-1"
   }
 ];
