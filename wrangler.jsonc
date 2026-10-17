@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mcp-website",
+  "compatibility_date": "2026-10-01",
+  "pages_build_output_dir": "dist",
+  "r2_buckets": [
+    {
+      "binding": "DOWNLOADS",
+      "bucket_name": "mcp-audio-downloads"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "DOWNLOAD_TOKENS",
+      "id": "5a13154ac31c4764a00f3e8e1888a4e7"
+    }
+  ]
+}
