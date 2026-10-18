@@ -5,6 +5,7 @@ import { loadWhop } from "@whop/elements";
 import Samples from "./pages/Samples";
 import SamplePack from "./pages/SamplePack";
 import Download from "./pages/Download";
+import Legal from "./pages/Legal";
 import logo from "./assets/logo.svg";
 import originalLogo from "./assets/logo.png";
 import botanical from "./assets/tinychain-art.png";
@@ -858,6 +859,7 @@ function AppLayout() {
           <Route path="/samples" element={<Samples />} />
           <Route path="/samples/:id" element={<SamplePack />} />
           <Route path="/download" element={<Download />} />
+          <Route path="/legal/:page" element={<Legal />} />
         </Routes>
       </div>
       <footer className="site-footer">
@@ -869,6 +871,12 @@ function AppLayout() {
           <a className="text-link" href="#main">
             Back to top ↑
           </a>
+        </div>
+        <div className="shell footer-legal">
+          <Link to="/legal/terms">Terms</Link>
+          <Link to="/legal/refunds">Refunds</Link>
+          <Link to="/legal/privacy">Privacy</Link>
+          <Link to="/legal/contact">Contact</Link>
         </div>
         <div className="shell footer-bottom">
           <span>© {new Date().getFullYear()} MCP Audio</span>

@@ -1719,3 +1719,22 @@ body:has(.homepage) {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
   z-index: 10;
 }
+
+.footer-legal {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-bottom: 1rem;
+}
+
+.footer-legal a {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+.footer-legal a:hover {
+  opacity: 1;
+}
