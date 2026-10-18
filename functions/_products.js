@@ -2,8 +2,8 @@
 //
 // `key`      = the object's name inside the mcp-audio-downloads bucket
 // `filename` = what the buyer's browser saves the download as
-// `free`     = $0 products, which are fulfilled from membership.went_valid
-//              because Whop does not raise payment.succeeded for them
+// `free`     = $0 products, fulfilled from membership.activated, since a
+//              $0 order never raises payment.succeeded
 export const PRODUCTS = {
   plan_KeHnsH96XuDwQ: {
     packId: "vol-1",

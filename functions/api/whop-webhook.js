@@ -30,12 +30,12 @@ export async function onRequestPost({ request, env }) {
   }
 
   // Paid packs fulfil on payment. Free ones never raise payment.succeeded, so
-  // they fulfil on the membership going valid instead — and only free ones do,
+  // they fulfil on membership.activated instead — and only free ones do,
   // otherwise a paid purchase would mint a second token for the same sale.
   let claimKey;
   if (event.type === "payment.succeeded") {
     claimKey = `payment:${data.id}`;
-  } else if (event.type === "membership.went_valid" && product.free) {
+  } else if (event.type === "membership.activated" && product.free) {
     claimKey = `membership:${data.id}`;
   } else {
     return new Response("Ignored", { status: 200 });
