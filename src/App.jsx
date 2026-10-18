@@ -1,13 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from "react-router-dom";
+import { WhopElements } from "@whop/elements-react";
+import { loadWhop } from "@whop/elements";
 import Samples from "./pages/Samples";
 import SamplePack from "./pages/SamplePack";
+import Download from "./pages/Download";
 import logo from "./assets/logo.svg";
 import originalLogo from "./assets/logo.png";
 import botanical from "./assets/tinychain-art.png";
 import tinychainScreenshot from "./assets/tinychain-screenshot.png";
 import bandzScreenshot from "./assets/bandz-screenshot.png";
 import "./App.css";
+
+// Loaded once at module scope: the SDK should not be re-fetched per render.
+const whopElements = loadWhop();
 
 const stages = [
   {
@@ -851,6 +857,7 @@ function AppLayout() {
           <Route path="/bandz" element={<Bandz />} />
           <Route path="/samples" element={<Samples />} />
           <Route path="/samples/:id" element={<SamplePack />} />
+          <Route path="/download" element={<Download />} />
         </Routes>
       </div>
       <footer className="site-footer">
@@ -874,9 +881,11 @@ function AppLayout() {
 
 function App() {
   return (
-    <Router>
-      <AppLayout />
-    </Router>
+    <WhopElements elements={whopElements}>
+      <Router>
+        <AppLayout />
+      </Router>
+    </WhopElements>
   );
 }
 export default App;
