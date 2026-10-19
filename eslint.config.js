@@ -7,6 +7,13 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 export default defineConfig([
   globalIgnores(['dist']),
   {
+    // Node scripts and Cloudflare Functions, not browser code.
+    files: ['scripts/**/*.js', 'functions/**/*.js'],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.worker },
+    },
+  },
+  {
     files: ['**/*.{js,jsx}'],
     extends: [
       js.configs.recommended,
