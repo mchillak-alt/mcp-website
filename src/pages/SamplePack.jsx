@@ -1,6 +1,7 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { samples } from '../data/samples';
+import { getPaddle } from '../lib/paddle';
 
 function Arrow({ diagonal = false }) {
   return <span aria-hidden="true">{diagonal ? "↗" : "→"}</span>;
@@ -8,7 +9,37 @@ function Arrow({ diagonal = false }) {
 
 export default function SamplePack() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const pack = samples.find(s => s.id === id);
+  const [status, setStatus] = React.useState('idle');
+
+  const openCheckout = React.useCallback(async () => {
+    setStatus('opening');
+    try {
+      const paddle = await getPaddle();
+      paddle.Checkout.open({
+        items: [{ priceId: pack.priceId, quantity: 1 }],
+        settings: {
+          variant: 'one-page',
+          // Fallback if the completed event is missed; Paddle appends _ptxn.
+          successUrl: `${window.location.origin}/download`,
+        },
+        eventCallback(event) {
+          // The transaction id is what the download page claims against. Taking
+          // it from the event is more reliable than parsing the redirect URL.
+          if (event?.name === 'checkout.completed') {
+            const txn = event.data?.transaction_id;
+            if (txn) navigate(`/download?transaction=${encodeURIComponent(txn)}`);
+          }
+          if (event?.name === 'checkout.error') setStatus('error');
+        },
+      });
+      setStatus('idle');
+    } catch {
+      setStatus('error');
+    }
+  }, [pack, navigate]);
+
 
   React.useEffect(() => {
     if (pack) {
@@ -60,20 +91,30 @@ export default function SamplePack() {
                 <span style={{ fontSize: '1.5rem', fontFamily: 'var(--font-medium)' }}>
                   {pack.price === 0 ? "Free" : `$${pack.price}`}
                 </span>
-                <a
-                  href={pack.checkoutUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="button button-primary"
-                >
-                  {pack.price === 0 ? "Download" : "Buy"} <Arrow diagonal />
-                </a>
+                {pack.price === 0 ? (
+                  <a className="button button-primary" href={`/api/free/${pack.id}`}>
+                    Download <Arrow />
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    className="button button-primary"
+                    onClick={openCheckout}
+                    disabled={status === 'opening'}
+                  >
+                    {status === 'opening' ? 'Opening…' : 'Buy'} <Arrow />
+                  </button>
+                )}
               </div>
             </div>
           </div>
 
           <div className="tiny-hero-caption eyebrow" style={{ marginTop: '4rem' }}>
-            <span>Available for instant download.</span>
+            <span>
+              {status === 'error'
+                ? "Checkout couldn't open. Email hello@mcpaudio.com and we'll sort it out."
+                : 'Available for instant download.'}
+            </span>
           </div>
         </div>
       </section>
