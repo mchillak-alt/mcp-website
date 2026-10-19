@@ -79,14 +79,14 @@ export default function Download() {
     body = (
       <>
         <h1>Thank you — {packs.length > 1 ? 'your packs are' : 'your pack is'} ready</h1>
-        <div style={{ display: 'grid', gap: '1rem', margin: '2rem 0', justifyContent: 'center' }}>
+        <div className="download-actions">
           {packs.map((pack) => (
             <a key={pack.packId} className="button button-primary" href={pack.url}>
               {pack.filename} <Arrow />
             </a>
           ))}
         </div>
-        <p className="eyebrow">
+        <p className="download-note eyebrow">
           Save this page — the links stay good for 90 days and up to 10 downloads.
         </p>
       </>
@@ -113,8 +113,8 @@ export default function Download() {
   return (
     <main id="main">
       <section className="tiny-hero" aria-labelledby="download-title">
-        <div className="shell tiny-hero-inner" style={{ textAlign: 'center', padding: '6rem 0' }}>
-          <div className="tiny-identity" id="download-title">{body}</div>
+        <div className="shell tiny-hero-inner">
+          <div className="download-panel" id="download-title">{body}</div>
         </div>
       </section>
     </main>
