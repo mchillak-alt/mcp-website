@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Checkout, CheckoutElement } from '@whop/elements-react';
 import { samples } from '../data/samples';
 
 function Arrow({ diagonal = false }) {
@@ -10,7 +9,6 @@ function Arrow({ diagonal = false }) {
 export default function SamplePack() {
   const { id } = useParams();
   const pack = samples.find(s => s.id === id);
-  const [checkoutOpen, setCheckoutOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (pack) {
@@ -62,32 +60,17 @@ export default function SamplePack() {
                 <span style={{ fontSize: '1.5rem', fontFamily: 'var(--font-medium)' }}>
                   {pack.price === 0 ? "Free" : `$${pack.price}`}
                 </span>
-                {!checkoutOpen && (
-                  <button
-                    type="button"
-                    className="button button-primary"
-                    onClick={() => setCheckoutOpen(true)}
-                  >
-                    {pack.price === 0 ? "Get it" : "Buy"} <Arrow />
-                  </button>
-                )}
+                <a
+                  href={pack.checkoutUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button button-primary"
+                >
+                  {pack.price === 0 ? "Download" : "Buy"} <Arrow diagonal />
+                </a>
               </div>
             </div>
           </div>
-
-          {checkoutOpen && (
-            <div className="pack-checkout" style={{ marginTop: '4rem', maxWidth: '34rem', marginInline: 'auto' }}>
-              {/* Payment is collected in Whop's iframe; the pack itself is
-                  delivered from our own storage once the webhook confirms. */}
-              <Checkout
-                plan={pack.planId}
-                returnUrl={`${window.location.origin}/download`}
-                metadata={{ packId: pack.id }}
-              >
-                <CheckoutElement />
-              </Checkout>
-            </div>
-          )}
 
           <div className="tiny-hero-caption eyebrow" style={{ marginTop: '4rem' }}>
             <span>Available for instant download.</span>

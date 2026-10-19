@@ -3,7 +3,7 @@
 // BUSINESS_NAME, CONTACT_EMAIL and JURISDICTION are the only things that need
 // filling in — they appear throughout the documents below.
 export const BUSINESS_NAME = "MCP Audio";
-export const CONTACT_EMAIL = "support@mcpaudio.com";
+export const CONTACT_EMAIL = "hello@mcpaudio.com";
 export const JURISDICTION = "the State of California, United States";
 export const LAST_UPDATED = "18 October 2026";
 
