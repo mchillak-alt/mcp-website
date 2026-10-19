@@ -1,9 +1,7 @@
 // After checkout, the buyer's browser polls this until the webhook has landed.
-// Paid packs are claimed by payment id, free ones by membership id — try both.
+// `id` is the Paddle transaction id returned by the checkout.
 export async function onRequestGet({ params, env }) {
-  const token =
-    (await env.DOWNLOAD_TOKENS.get(`payment:${params.id}`)) ??
-    (await env.DOWNLOAD_TOKENS.get(`membership:${params.id}`));
+  const token = await env.DOWNLOAD_TOKENS.get(`txn:${params.id}`);
 
   if (!token) {
     // Not an error — the webhook is usually a beat behind the redirect.
@@ -11,11 +9,15 @@ export async function onRequestGet({ params, env }) {
   }
 
   const grant = await env.DOWNLOAD_TOKENS.get(`token:${token}`, "json");
+  if (!grant) return Response.json({ ready: false }, { status: 202 });
 
   return Response.json({
     ready: true,
     token,
-    filename: grant?.filename ?? null,
-    url: `/api/download/${token}`,
+    packs: grant.packs.map(({ packId, filename }) => ({
+      packId,
+      filename,
+      url: `/api/download/${token}/${packId}`,
+    })),
   });
 }
