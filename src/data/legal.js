@@ -4,7 +4,7 @@
 // filling in — they appear throughout the documents below.
 export const BUSINESS_NAME = "MCP Audio";
 export const CONTACT_EMAIL = "support@mcpaudio.com";
-export const JURISDICTION = "the State of New York, United States";
+export const JURISDICTION = "the State of California, United States";
 export const LAST_UPDATED = "18 October 2026";
 
 export const legalPages = {
