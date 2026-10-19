@@ -25,8 +25,11 @@ if (apiKey.startsWith("pdl_live_")) {
 
 const paddle = new Paddle(apiKey, { environment: Environment.sandbox });
 
-// Downloadable asset packs. Cannot be changed after the first sale.
-const TAX_CATEGORY = "digital-goods";
+// "digital-goods" is the correct category for downloadable asset packs, but
+// Paddle gates it behind approval. Sandbox runs on "standard" so development is
+// not blocked; set PADDLE_TAX_CATEGORY=digital-goods for the live seed once
+// Paddle has approved it. Cannot be changed after a product's first sale.
+const TAX_CATEGORY = process.env.PADDLE_TAX_CATEGORY ?? "standard";
 
 const PACKS = [
   { packId: "vol-1", name: "Mischa Chillak Vol.1", amount: "2499" },
@@ -45,6 +48,7 @@ async function existingProductsByName() {
 }
 
 async function seed() {
+  console.log(`tax category: ${TAX_CATEGORY}\n`);
   const existing = await existingProductsByName();
   const results = [];
 
@@ -63,14 +67,35 @@ async function seed() {
       console.log(`created  ${pack.name} (${product.id})`);
     }
 
-    // One-time purchase: no billingCycle, no trialPeriod.
-    const price = await paddle.prices.create({
-      productId: product.id,
-      description: `${pack.name} — one-time USD`,
-      unitPrice: { amount: pack.amount, currencyCode: "USD" },
-      customData: { packId: pack.packId },
-    });
-    console.log(`  price  ${price.id}  $${(Number(pack.amount) / 100).toFixed(2)}`);
+    // Reuse a matching price if one is already on the product, so re-running
+    // this script does not leave a pile of duplicate prices behind.
+    let price = null;
+    for await (const existingPrice of paddle.prices.list({
+      productId: [product.id],
+      status: ["active"],
+    })) {
+      if (
+        existingPrice.unitPrice?.amount === pack.amount &&
+        existingPrice.unitPrice?.currencyCode === "USD" &&
+        !existingPrice.billingCycle
+      ) {
+        price = existingPrice;
+        break;
+      }
+    }
+
+    if (price) {
+      console.log(`  price  ${price.id}  (existing)`);
+    } else {
+      // One-time purchase: no billingCycle, no trialPeriod.
+      price = await paddle.prices.create({
+        productId: product.id,
+        description: `${pack.name} — one-time USD`,
+        unitPrice: { amount: pack.amount, currencyCode: "USD" },
+        customData: { packId: pack.packId },
+      });
+      console.log(`  price  ${price.id}  $${(Number(pack.amount) / 100).toFixed(2)}`);
+    }
 
     results.push({ packId: pack.packId, productId: product.id, priceId: price.id });
   }
