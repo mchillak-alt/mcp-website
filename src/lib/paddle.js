@@ -26,6 +26,17 @@ export function getPaddle() {
     paddlePromise = initializePaddle({
       token: PADDLE_CLIENT_TOKEN,
       environment: PADDLE_ENV,
+      // Must be registered here — Paddle ignores an eventCallback passed to
+      // Checkout.open(). This is the only reliable way to learn the
+      // transaction id: Paddle's success redirect does not always carry it.
+      eventCallback(event) {
+        if (event?.name !== "checkout.completed") return;
+        const transactionId = event.data?.transaction_id;
+        if (!transactionId) return;
+        window.location.assign(
+          `/download?transaction=${encodeURIComponent(transactionId)}`
+        );
+      },
     }).catch((error) => {
       // Let the next caller retry rather than caching a permanent failure.
       paddlePromise = null;

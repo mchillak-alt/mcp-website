@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { samples } from '../data/samples';
 import { getPaddle, paddleCheckoutEnabled } from '../lib/paddle';
 
@@ -9,7 +9,6 @@ function Arrow({ diagonal = false }) {
 
 export default function SamplePack() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const pack = samples.find(s => s.id === id);
   const [status, setStatus] = React.useState('idle');
   const paddleOn = paddleCheckoutEnabled(window.location.search);
@@ -25,21 +24,12 @@ export default function SamplePack() {
           // Fallback if the completed event is missed; Paddle appends _ptxn.
           successUrl: `${window.location.origin}/download`,
         },
-        eventCallback(event) {
-          // The transaction id is what the download page claims against. Taking
-          // it from the event is more reliable than parsing the redirect URL.
-          if (event?.name === 'checkout.completed') {
-            const txn = event.data?.transaction_id;
-            if (txn) navigate(`/download?transaction=${encodeURIComponent(txn)}`);
-          }
-          if (event?.name === 'checkout.error') setStatus('error');
-        },
       });
       setStatus('idle');
     } catch {
       setStatus('error');
     }
-  }, [pack, navigate]);
+  }, [pack]);
 
 
   React.useEffect(() => {
