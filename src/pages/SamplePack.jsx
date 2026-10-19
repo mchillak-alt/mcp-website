@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { samples } from '../data/samples';
-import { getPaddle } from '../lib/paddle';
+import { getPaddle, paddleCheckoutEnabled } from '../lib/paddle';
 
 function Arrow({ diagonal = false }) {
   return <span aria-hidden="true">{diagonal ? "↗" : "→"}</span>;
@@ -12,6 +12,7 @@ export default function SamplePack() {
   const navigate = useNavigate();
   const pack = samples.find(s => s.id === id);
   const [status, setStatus] = React.useState('idle');
+  const paddleOn = paddleCheckoutEnabled(window.location.search);
 
   const openCheckout = React.useCallback(async () => {
     setStatus('opening');
@@ -94,6 +95,15 @@ export default function SamplePack() {
                 {pack.price === 0 ? (
                   <a className="button button-primary" href={`/api/free/${pack.id}`}>
                     Download <Arrow />
+                  </a>
+                ) : !paddleOn ? (
+                  <a
+                    href={pack.checkoutUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="button button-primary"
+                  >
+                    Buy <Arrow diagonal />
                   </a>
                 ) : (
                   <button

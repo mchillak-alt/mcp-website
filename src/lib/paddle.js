@@ -8,6 +8,16 @@ import { initializePaddle } from "@paddle/paddle-js";
 export const PADDLE_CLIENT_TOKEN = "test_e170ee9f9ba28108f1663e26ac8";
 export const PADDLE_ENV = "sandbox";
 
+// While PADDLE_ENV is "sandbox", checkout is reachable only by adding ?paddle
+// to a pack URL. Without this, sandbox checkout on the public site would let
+// anyone buy with a test card and walk away with the real files. Flip to live
+// credentials and set this true to open it to everyone.
+export const PADDLE_ENABLED_FOR_EVERYONE = false;
+
+export function paddleCheckoutEnabled(search) {
+  return PADDLE_ENABLED_FOR_EVERYONE || new URLSearchParams(search).has("paddle");
+}
+
 let paddlePromise = null;
 
 // Paddle.js refuses a second initialize, so everything shares one instance.
