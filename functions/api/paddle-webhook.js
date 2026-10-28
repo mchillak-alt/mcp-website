@@ -80,6 +80,10 @@ export async function onRequestPost({ request, env }) {
     packs: grants.map(({ packId, key, filename }) => ({ packId, key, filename })),
     transactionId,
     customerId: data.customer_id ?? null,
+    // Present because the notification destination has sensitive fields
+    // enabled; without that Paddle sends only customer_id and the email
+    // would cost an API call inside the webhook's 5 second budget.
+    email: data.customer?.email ?? null,
     downloads: 0,
     issuedAt: new Date().toISOString(),
   };
