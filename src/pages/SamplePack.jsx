@@ -21,8 +21,10 @@ export default function SamplePack() {
         items: [{ priceId: pack.priceId, quantity: 1 }],
         settings: {
           variant: 'one-page',
-          // Fallback if the completed event is missed; Paddle appends _ptxn.
-          successUrl: `${window.location.origin}/download`,
+          // Deliberately no successUrl: Paddle redirects there the instant
+          // payment completes, with no transaction id attached, which beats
+          // our checkout.completed handler to the navigation. Without it the
+          // overlay holds and the handler redirects with the id.
         },
       });
       setStatus('idle');

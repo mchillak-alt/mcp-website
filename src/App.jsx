@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Link } from "react
 import Samples from "./pages/Samples";
 import SamplePack from "./pages/SamplePack";
 import Download from "./pages/Download";
+import FreePack from "./pages/FreePack";
 import Legal from "./pages/Legal";
 import logo from "./assets/logo.svg";
 import originalLogo from "./assets/logo.png";
@@ -164,25 +165,36 @@ function Circuit({ className = "" }) {
     </svg>
   );
 }
-// Kit (ConvertKit) form — posts to Kit's public form endpoint, no API key needed.
-const KIT_FORM_ID = "10037259";
+// Kit (ConvertKit) signup. Posts to our own Worker rather than to Kit directly:
+// a browser request to Kit's form endpoint has to use mode "no-cors", which
+// makes the response unreadable, so the form reported success even when Kit
+// rejected the address. The Worker can read Kit's real status.
+// The Kit form id lives server side in functions/_kit.js.
 function KitSignup() {
   const [email, setEmail] = useState("");
+  const [company, setCompany] = useState(""); // honeypot
+  const [error, setError] = useState("");
   const [state, setState] = useState("idle"); // idle | loading | success | error
   async function handleSubmit(event) {
     event.preventDefault();
     setState("loading");
-    const body = new FormData();
-    body.append("email_address", email);
+    setError("");
     try {
-      await fetch(`https://app.kit.com/forms/${KIT_FORM_ID}/subscriptions`, {
+      const res = await fetch("/api/subscribe", {
         method: "POST",
-        body,
-        mode: "no-cors",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, company, source: "homepage" }),
       });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        setError(body.error ?? "Something went wrong. Please try again.");
+        setState("error");
+        return;
+      }
       setState("success");
       setEmail("");
     } catch {
+      setError("Could not reach the server. Check your connection and try again.");
       setState("error");
     }
   }
@@ -206,12 +218,23 @@ function KitSignup() {
         onChange={(e) => setEmail(e.target.value)}
         disabled={state === "loading"}
       />
+      {/* Bots fill every field they find; humans never see this. */}
+      <input
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="free-claim-honeypot"
+        value={company}
+        onChange={(e) => setCompany(e.target.value)}
+      />
       <button id="kit-submit" type="submit" disabled={state === "loading"}>
         {state === "loading" ? "Joining…" : "Notify me"} <Arrow />
       </button>
       {state === "error" && (
         <p className="signup-error" role="alert">
-          Something went wrong. Please try again.
+          {error}
         </p>
       )}
     </form>
@@ -854,6 +877,9 @@ function AppLayout() {
           <Route path="/samples" element={<Samples />} />
           <Route path="/samples/:id" element={<SamplePack />} />
           <Route path="/download" element={<Download />} />
+          {/* Short, permanent link for Instagram DMs; /free/:id is for a second pack later. */}
+          <Route path="/free" element={<FreePack />} />
+          <Route path="/free/:id" element={<FreePack />} />
           <Route path="/legal/:page" element={<Legal />} />
         </Routes>
       </div>

@@ -1780,3 +1780,170 @@ body:has(.homepage) {
   opacity: 0.7;
   margin-bottom: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Free-pack claim page (/free)
+
+   Shares the download page's narrow, centred column — it is a landing page for
+   one action, not a hero. Reuses .signup-form for the email field so the
+   homepage signup and this one stay visually identical. */
+.free-claim {
+  max-width: 38rem;
+  margin: 0 auto;
+  padding: 4rem 0 6rem;
+  text-align: center;
+}
+
+.free-claim h1 {
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.1;
+  margin: 1rem 0 1.25rem;
+}
+
+.free-claim-blurb {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 auto 1.75rem;
+  max-width: 32rem;
+}
+
+.free-claim-contents {
+  list-style: none;
+  margin: 0 auto 2.5rem;
+  padding: 0;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+  font-size: 14px;
+}
+
+.free-claim-contents li {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.free-claim-contents li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  opacity: 0.5;
+}
+
+.free-claim-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  border-top: 1px solid var(--ink);
+  padding-top: 2.5rem;
+}
+
+.free-claim-step .eyebrow {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.free-claim-step .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* The email row is left-aligned inside a centred column, so cap its width
+   rather than letting it stretch the full 38rem. */
+.free-claim-step .signup-form {
+  max-width: 30rem;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.free-claim-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.free-claim-note {
+  display: block;
+  font-size: 11px;
+  opacity: 0.7;
+  margin: 1rem auto 0;
+  max-width: 26rem;
+  line-height: 1.5;
+}
+
+.free-claim-done h2 {
+  font-size: clamp(22px, 2.6vw, 30px);
+  margin: 0 0 0.5rem;
+}
+
+.free-claim-done .download-actions {
+  margin: 1.5rem 0 0;
+}
+
+.free-claim-follow {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ink);
+}
+
+.free-claim-follow p {
+  font-size: 15px;
+  margin: 0 0 1.25rem;
+}
+
+.free-claim-upsell {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ink);
+}
+
+.free-claim-upsell > .eyebrow {
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+.free-claim-upsell-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.free-claim-upsell-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+}
+
+.free-claim-upsell-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--interface-radius);
+  transition: opacity 0.25s;
+}
+
+.free-claim-upsell-card:hover img {
+  opacity: 0.8;
+}
+
+.free-claim-upsell-title {
+  font-family: var(--font-medium);
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .free-claim {
+    padding: 2.5rem 0 4rem;
+  }
+
+  .free-claim-steps {
+    gap: 2rem;
+  }
+}
