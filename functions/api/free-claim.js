@@ -45,14 +45,10 @@ export async function onRequestPost({ request, env }) {
     return Response.json({ error: "That email doesn't look right." }, { status: 400 });
   }
 
-  let debug = { keyPresent: Boolean(env.KIT_API_KEY), kit: null };
-
   if (env.KIT_API_KEY) {
     try {
       await subscribeToKit(env.KIT_API_KEY, email, packId);
-      debug.kit = "ok";
     } catch (e) {
-      debug.kit = e.message;
       // Deliver anyway. They gave a real address in good faith, and a Kit
       // outage should not read to them as a broken download — but log it
       // loudly, because silent failure here means the giveaway costs us
@@ -61,7 +57,6 @@ export async function onRequestPost({ request, env }) {
     }
   } else {
     console.error("free-claim: KIT_API_KEY is not set; delivered without subscribing");
-    debug.kit = "no key";
   }
 
   const token = crypto.randomUUID().replace(/-/g, "");
@@ -78,11 +73,8 @@ export async function onRequestPost({ request, env }) {
     { expirationTtl: TOKEN_TTL_SECONDS }
   );
 
-  const wantsDebug = new URL(request.url).searchParams.has("debug");
-
   return Response.json({
     url: `/api/download/${token}/${pack.packId}`,
     filename: pack.filename,
-    ...(wantsDebug ? { debug } : {}),
   });
 }
