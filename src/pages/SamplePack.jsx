@@ -89,13 +89,14 @@ export default function SamplePack() {
                     Download <Arrow />
                   </a>
                 ) : !paddleOn ? (
+                  // Checkout is being migrated to Paddle. Until it is live,
+                  // send interest to us rather than to a checkout we cannot
+                  // fulfil — the packs exceed Whop's 128MB delivery limit.
                   <a
-                    href={pack.checkoutUrl}
-                    target="_blank"
-                    rel="noreferrer"
                     className="button button-primary"
+                    href={`mailto:hello@mcpaudio.com?subject=${encodeURIComponent(`Notify me — ${pack.title}`)}`}
                   >
-                    Buy <Arrow diagonal />
+                    Notify me <Arrow />
                   </a>
                 ) : (
                   <button

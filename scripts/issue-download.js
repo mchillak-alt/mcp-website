@@ -7,6 +7,9 @@
 
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
+import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { PRODUCTS, ACCENTS_FREE, TOKEN_TTL_SECONDS } from "../functions/_products.js";
 
 const KV_NAMESPACE_ID = "5a13154ac31c4764a00f3e8e1888a4e7";
@@ -34,13 +37,11 @@ for (const packId of requested) {
   packs.push({ packId: pack.packId, key: pack.key, filename: pack.filename });
 }
 
-function run(args, stdin) {
+function run(args) {
   return new Promise((resolve, reject) => {
-    const child = spawn("npx", args, { stdio: ["pipe", "ignore", "inherit"] });
+    const child = spawn("npx", args, { stdio: ["ignore", "ignore", "inherit"] });
     child.on("error", reject);
     child.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit ${code}`))));
-    child.stdin.write(stdin);
-    child.stdin.end();
   });
 }
 
@@ -54,16 +55,21 @@ const grant = {
   issuedAt: new Date().toISOString(),
 };
 
-await run(
-  [
+// wrangler reads the value from a real file; a pipe is not reliable here.
+const dir = mkdtempSync(join(tmpdir(), "grant-"));
+const file = join(dir, "grant.json");
+writeFileSync(file, JSON.stringify(grant));
+try {
+  await run([
     "wrangler", "kv", "key", "put", `token:${token}`,
     "--namespace-id", KV_NAMESPACE_ID,
     "--remote",
     "--expiration-ttl", String(TOKEN_TTL_SECONDS),
-    "--path", "/dev/stdin",
-  ],
-  JSON.stringify(grant)
-);
+    "--path", file,
+  ]);
+} finally {
+  rmSync(dir, { recursive: true, force: true });
+}
 
 console.log("\nSend this link to the customer:\n");
 console.log(`${SITE}/download?token=${token}`);
