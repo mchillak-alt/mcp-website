@@ -15,6 +15,8 @@ export default function Download() {
   const [params] = useSearchParams();
   // Paddle appends _ptxn on its own redirect; `transaction` is ours.
   const transactionId = params.get('transaction') ?? params.get('_ptxn');
+  // Links issued by hand carry the token itself, with no transaction behind it.
+  const directToken = params.get('token');
 
   const [state, setState] = React.useState('waiting');
   const [packs, setPacks] = React.useState([]);
@@ -24,6 +26,25 @@ export default function Download() {
   }, []);
 
   React.useEffect(() => {
+    if (directToken) {
+      let stale = false;
+      fetch(`/api/grant/${encodeURIComponent(directToken)}`)
+        .then((r) => r.json())
+        .then((b) => {
+          if (stale) return;
+          if (b.ready) {
+            setPacks(b.packs ?? []);
+            setState('ready');
+          } else {
+            setState('notfound');
+          }
+        })
+        .catch(() => !stale && setState('notfound'));
+      return () => {
+        stale = true;
+      };
+    }
+
     if (!transactionId) return;
 
     let cancelled = false;
@@ -58,11 +79,21 @@ export default function Download() {
     return () => {
       cancelled = true;
     };
-  }, [transactionId]);
+  }, [transactionId, directToken]);
 
   let body;
 
-  if (!transactionId) {
+  if (state === 'notfound') {
+    body = (
+      <>
+        <h1>This link has expired</h1>
+        <p>
+          Download links last 90 days. Email hello@mcpaudio.com with the address
+          you bought under and we’ll issue a fresh one.
+        </p>
+      </>
+    );
+  } else if (!transactionId && !directToken) {
     body = (
       <>
         <h1>Nothing to download here</h1>
