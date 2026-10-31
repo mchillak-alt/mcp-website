@@ -15,17 +15,23 @@ const SUBSCRIBED_EVENTS = ["transaction.completed"];
 const CF_PROJECT = "mcp-website";
 const CF_SECRET_NAME = "PADDLE_WEBHOOK_SECRET";
 
-const apiKey = process.env.PADDLE_API_KEY;
+// Targeting live is explicit and opt-in, same as the catalog seed.
+const live = process.argv.includes("--live");
+const apiKey = live ? process.env.PADDLE_LIVE_API_KEY : process.env.PADDLE_API_KEY;
+const expectedPrefix = live ? "pdl_live_" : "pdl_sdbx_";
+
 if (!apiKey) {
-  console.error("error: PADDLE_API_KEY is not set.");
+  console.error(`error: ${live ? "PADDLE_LIVE_API_KEY" : "PADDLE_API_KEY"} is not set.`);
   process.exit(1);
 }
-if (apiKey.startsWith("pdl_live_")) {
-  console.error("error: that is a live API key. This script only targets sandbox.");
+if (!apiKey.startsWith(expectedPrefix)) {
+  console.error(`error: key does not look like a ${live ? "live" : "sandbox"} key.`);
   process.exit(1);
 }
 
-const paddle = new Paddle(apiKey, { environment: Environment.sandbox });
+const paddle = new Paddle(apiKey, {
+  environment: live ? Environment.production : Environment.sandbox,
+});
 
 // Some SDK list methods return an array, others a paginated async iterable.
 async function collect(listed) {
@@ -66,7 +72,7 @@ async function main() {
     console.log(`  subscribed: ${destination.subscribedEvents.map((e) => e.name).join(", ")}`);
   } else {
     destination = await paddle.notificationSettings.create({
-      description: "mcpaudio.com — sandbox",
+      description: `mcpaudio.com — ${live ? "live" : "sandbox"}`,
       destination: WEBHOOK_URL,
       subscribedEvents: SUBSCRIBED_EVENTS,
       type: "url",
@@ -82,10 +88,10 @@ async function main() {
   // Public token for Paddle.js in the browser.
   const tokens = await collect(paddle.clientTokens.list());
   let clientToken =
-    tokens.find((t) => t.name === "mcpaudio.com web" && t.status === "active") ?? null;
+    tokens.find((t) => t.name === `mcpaudio.com web${live ? "" : " (sandbox)"}` && t.status === "active") ?? null;
   if (!clientToken) {
     clientToken = await paddle.clientTokens.create({
-      name: "mcpaudio.com web",
+      name: `mcpaudio.com web${live ? "" : " (sandbox)"}`,
       description: "Paddle.js on the site",
     });
   }

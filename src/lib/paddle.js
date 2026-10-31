@@ -5,13 +5,13 @@ import { initializePaddle } from "@paddle/paddle-js";
 //
 // Sandbox and live are separate: swap both of these at launch, and re-run
 // scripts/seed-paddle-catalog.js to get live price IDs for functions/_products.js.
-export const PADDLE_CLIENT_TOKEN = "test_e170ee9f9ba28108f1663e26ac8";
-export const PADDLE_ENV = "sandbox";
+export const PADDLE_CLIENT_TOKEN = "live_827fb77946abbc5b74039eebe3c";
+export const PADDLE_ENV = "production";
 
-// While PADDLE_ENV is "sandbox", checkout is reachable only by adding ?paddle
-// to a pack URL. Without this, sandbox checkout on the public site would let
-// anyone buy with a test card and walk away with the real files. Flip to live
-// credentials and set this true to open it to everyone.
+// Checkout stays reachable only by adding ?paddle to a pack URL until Paddle
+// has verified the account and approved the domain — live checkout will not
+// work before then, and a visible Buy button that fails is worse than none.
+// Set true once verification passes.
 export const PADDLE_ENABLED_FOR_EVERYONE = false;
 
 export function paddleCheckoutEnabled(search) {

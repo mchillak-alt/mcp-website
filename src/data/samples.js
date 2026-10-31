@@ -8,7 +8,7 @@ import accents from "../assets/samples/accents.jpg";
 export const samples = [
   {
     id: "vol-1",
-    priceId: "pri_01m5athbeqtqbckxbmmsv5y9y0",
+    priceId: "pri_01m69j0vg3d55n6b3g00ptxbcb",
     title: "Mischa Chillak Vol.1",
     description: "“Mischa Chillak Volume 1” is a 12-track musical library that channels the experimental spirit of 1970s Polish and Ukrainian psychedelic rock. Crafted using live instruments, analog synthesizers, and vintage outboard gear, the collection captures a raw, boundary-pushing sound that blends organic instrumentation with otherworldly electronic textures. Each track is ready to be flipped and sampled to help you create something unique and original-sounding in your own music.",
     price: 24.99,
@@ -17,7 +17,7 @@ export const samples = [
   },
   {
     id: "vol-2",
-    priceId: "pri_01m5athby7mvjmn4070dja8fmd",
+    priceId: "pri_01m69j0vw7wjh7qq04p2nzdce7",
     title: "Mischa Chillak Vol.2",
     description: "“Mischa Chillak Volume 2” continues the sonic exploration of psychedelic landscapes, pushing deeper into experimental territories. This collection expands on the raw, analog-driven soundscapes of Volume 1, featuring more intricate layering, expanded synthesizer textures, and a more adventurous approach to composition. Blending live instrumentation with electronic manipulation, the album delves further into the liminal spaces between organic performance and electronic abstraction.",
     price: 24.99,
@@ -26,7 +26,7 @@ export const samples = [
   },
   {
     id: "vol-3",
-    priceId: "pri_01m5athc7agsaj53jhn6zfgwz0",
+    priceId: "pri_01m69j0w932me01tbpbzjvxdrg",
     title: "Mischa Chillak Vol.3",
     description: "Mischa Chillak Vol.3 contains 11 original compositions that journey into the psychedelic sounds of Ukrainian Prog, Fusion & Russian Soul. Each sample contains very distinctive melodies, and unique sound selection that puts Mischa in a category of his own. Every composition was processed and recorded with tons of outboard gear such as the Moog Matriarch, Pulsar 32, Bae 1032, Altec 1567a, Retro Double Wide, various pedals, and live guitars to bring you that authentic analog sound and texture from a mid 70s Eastern European record.",
     price: 24.99,
@@ -35,7 +35,7 @@ export const samples = [
   },
   {
     id: "vol-4",
-    priceId: "pri_01m5athcg5k8h63pwx538qb1c9",
+    priceId: "pri_01m69j0wn91st5wv8wtk1tjkyy",
     title: "Mischa Chillak Vol.4",
     description: "Mischa Chillak Vol.4 delivers 11 original compositions engineered with professional-grade production. Each track is available with stems, giving you complete creative control to remix, sample, and build upon the foundation.\n\nBeyond the samples, you’ll gain direct insight into Mischa’s creative process through 3 full-length tutorials. Learn his hybrid workflow combining analog warmth with digital precision, explore advanced mixing techniques, and discover the FX strategies that define his distinctive sound.\n\nWhat’s included:\n• 11 original compositions (WAV format)\n• Full stems for each track\n• 3 in-depth production tutorials\n• Mixing and FX breakdown sessions\n• Analog and digital workflow insights",
     price: 24.99,
@@ -44,7 +44,7 @@ export const samples = [
   },
   {
     id: "vol-5",
-    priceId: "pri_01m5athcs9pfxjgnha2g4cspkn",
+    priceId: "pri_01m69j0x1wy5qx5y21df5m6g04",
     title: "Mischa Chillak Vol.5",
     description: "Mischa Chillak Vol.5 contains 10 samples inspired by 70s Psych, Soul & Experimental recordings. In addition to the samples, he's included 3 full length tutorials breaking down his thought process on creating samples, mixing & fx tips, plus showing you his unique hybrid approach of using analog and digital tools to craft his sound. This pack is very versatile and contains strong melodic lines that will inspire any producer no matter what genre of beats you're working on.",
     price: 24.99,
