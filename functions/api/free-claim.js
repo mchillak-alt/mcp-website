@@ -45,10 +45,13 @@ export async function onRequestPost({ request, env }) {
     return Response.json({ error: "That email doesn't look right." }, { status: 400 });
   }
 
+  let kitResult = "ok";
+
   if (env.KIT_API_KEY) {
     try {
       await subscribeToKit(env.KIT_API_KEY, email, packId);
     } catch (e) {
+      kitResult = e.message;
       // Deliver anyway. They gave a real address in good faith, and a Kit
       // outage should not read to them as a broken download — but log it
       // loudly, because silent failure here means the giveaway costs us
@@ -57,7 +60,17 @@ export async function onRequestPost({ request, env }) {
     }
   } else {
     console.error("free-claim: KIT_API_KEY is not set; delivered without subscribing");
+    kitResult = "no api key";
   }
+
+  // Pages log tailing is unreliable here, so keep a short-lived record of what
+  // actually happened to each claim. Without it a failed subscribe is invisible:
+  // the visitor still gets their pack, so nothing looks wrong from outside.
+  await env.DOWNLOAD_TOKENS.put(
+    `claimlog:${Date.now()}:${email}`,
+    JSON.stringify({ email, packId, kit: kitResult, at: new Date().toISOString() }),
+    { expirationTtl: 60 * 60 * 24 * 7 }
+  );
 
   const token = crypto.randomUUID().replace(/-/g, "");
   await env.DOWNLOAD_TOKENS.put(

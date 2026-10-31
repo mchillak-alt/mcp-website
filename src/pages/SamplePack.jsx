@@ -134,52 +134,52 @@ export default function SamplePack() {
                   </button>
                 )}
               </div>
-            </div>
-          </div>
 
-          {pack.price === 0 && (
-            <div className="free-claim">
-              {freeState === 'ready' ? (
-                <>
-                  <a className="button button-primary" href={freeUrl}>
-                    Download {pack.title} <Arrow />
-                  </a>
-                  <p className="free-claim-note">
-                    Check your inbox too — you’re on the list for new packs.
-                  </p>
-                </>
-              ) : (
-                <form onSubmit={claimFree}>
-                  <label htmlFor="free-email">
-                    Enter your email and the pack is yours.
-                  </label>
-                  <div className="free-claim-row">
-                    <input
-                      id="free-email"
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      autoComplete="email"
-                    />
-                    <button
-                      type="submit"
-                      className="button button-primary"
-                      disabled={freeState === 'sending'}
-                    >
-                      {freeState === 'sending' ? 'Sending…' : 'Get it'} <Arrow />
-                    </button>
-                  </div>
-                  <p className="free-claim-note">
-                    You’ll join the MCP Audio list and hear when new packs land.
-                    Unsubscribe any time — we don’t share your address.
-                  </p>
-                  {freeError && <p className="free-claim-error">{freeError}</p>}
-                </form>
+              {pack.price === 0 && (
+                <div className="free-claim">
+                  {freeState === 'ready' ? (
+                    <>
+                      <a className="button button-primary" href={freeUrl}>
+                        Download {pack.title} <Arrow />
+                      </a>
+                      <p className="free-claim-note">
+                        Check your inbox too — you’re on the list for new packs.
+                      </p>
+                    </>
+                  ) : (
+                    <form onSubmit={claimFree}>
+                      <label htmlFor="free-email">
+                        Enter your email and the pack is yours.
+                      </label>
+                      <div className="free-claim-row">
+                        <input
+                          id="free-email"
+                          type="email"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="you@example.com"
+                          autoComplete="email"
+                        />
+                        <button
+                          type="submit"
+                          className="button button-primary"
+                          disabled={freeState === 'sending'}
+                        >
+                          {freeState === 'sending' ? 'Sending…' : 'Get it'} <Arrow />
+                        </button>
+                      </div>
+                      <p className="free-claim-note">
+                        You’ll join the MCP Audio list and hear when new packs land.
+                        Unsubscribe any time — we don’t share your address.
+                      </p>
+                      {freeError && <p className="free-claim-error">{freeError}</p>}
+                    </form>
+                  )}
+                </div>
               )}
             </div>
-          )}
+          </div>
 
           <div className="tiny-hero-caption eyebrow" style={{ marginTop: '4rem' }}>
             <span>
