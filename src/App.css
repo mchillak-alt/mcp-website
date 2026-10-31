@@ -1947,3 +1947,56 @@ body:has(.homepage) {
     gap: 2rem;
   }
 }
+
+/* The free pack trades an email for the download, so the form is the
+   primary action on that page rather than a secondary newsletter box. */
+.free-claim {
+  max-width: 30rem;
+  margin: 3rem auto 0;
+  text-align: center;
+}
+
+.free-claim label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 0.75rem;
+}
+
+.free-claim-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.free-claim input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  font: inherit;
+  font-size: 14px;
+  border: 1px solid currentColor;
+  border-radius: var(--interface-radius, 0);
+  background: transparent;
+  color: inherit;
+}
+
+.free-claim .button {
+  white-space: nowrap;
+}
+
+.free-claim-note {
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.7;
+  margin: 0.75rem 0 0;
+}
+
+.free-claim-error {
+  font-size: 12px;
+  margin: 0.75rem 0 0;
+}
+
+@media (max-width: 30rem) {
+  .free-claim-row {
+    flex-direction: column;
+  }
+}

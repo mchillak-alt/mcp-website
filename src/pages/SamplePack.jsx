@@ -12,6 +12,35 @@ export default function SamplePack() {
   const pack = samples.find(s => s.id === id);
   const [status, setStatus] = React.useState('idle');
   const paddleOn = paddleCheckoutEnabled(window.location.search);
+  const [email, setEmail] = React.useState('');
+  const [freeState, setFreeState] = React.useState('idle');
+  const [freeUrl, setFreeUrl] = React.useState(null);
+  const [freeError, setFreeError] = React.useState(null);
+
+  const claimFree = React.useCallback(async (event) => {
+    event.preventDefault();
+    setFreeState('sending');
+    setFreeError(null);
+    try {
+      const res = await fetch('/api/free-claim', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email, packId: pack.id }),
+      });
+      const body = await res.json();
+      if (!res.ok) {
+        setFreeError(body.error ?? 'Something went wrong. Try again?');
+        setFreeState('idle');
+        return;
+      }
+      setFreeUrl(body.url);
+      setFreeState('ready');
+    } catch {
+      setFreeError('Something went wrong. Try again?');
+      setFreeState('idle');
+    }
+  }, [email, pack]);
+
 
   const openCheckout = React.useCallback(async () => {
     setStatus('opening');
@@ -84,11 +113,7 @@ export default function SamplePack() {
                 <span style={{ fontSize: '1.5rem', fontFamily: 'var(--font-medium)' }}>
                   {pack.price === 0 ? "Free" : `$${pack.price}`}
                 </span>
-                {pack.price === 0 ? (
-                  <a className="button button-primary" href={`/api/free/${pack.id}`}>
-                    Download <Arrow />
-                  </a>
-                ) : !paddleOn ? (
+                {pack.price === 0 ? null : !paddleOn ? (
                   // Checkout is being migrated to Paddle. Until it is live,
                   // send interest to us rather than to a checkout we cannot
                   // fulfil — the packs exceed Whop's 128MB delivery limit.
@@ -111,6 +136,50 @@ export default function SamplePack() {
               </div>
             </div>
           </div>
+
+          {pack.price === 0 && (
+            <div className="free-claim">
+              {freeState === 'ready' ? (
+                <>
+                  <a className="button button-primary" href={freeUrl}>
+                    Download {pack.title} <Arrow />
+                  </a>
+                  <p className="free-claim-note">
+                    Check your inbox too — you’re on the list for new packs.
+                  </p>
+                </>
+              ) : (
+                <form onSubmit={claimFree}>
+                  <label htmlFor="free-email">
+                    Enter your email and the pack is yours.
+                  </label>
+                  <div className="free-claim-row">
+                    <input
+                      id="free-email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      autoComplete="email"
+                    />
+                    <button
+                      type="submit"
+                      className="button button-primary"
+                      disabled={freeState === 'sending'}
+                    >
+                      {freeState === 'sending' ? 'Sending…' : 'Get it'} <Arrow />
+                    </button>
+                  </div>
+                  <p className="free-claim-note">
+                    You’ll join the MCP Audio list and hear when new packs land.
+                    Unsubscribe any time — we don’t share your address.
+                  </p>
+                  {freeError && <p className="free-claim-error">{freeError}</p>}
+                </form>
+              )}
+            </div>
+          )}
 
           <div className="tiny-hero-caption eyebrow" style={{ marginTop: '4rem' }}>
             <span>
